@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package com.mycompany.eccommerceplatform;
+package com.mycompany.eccomerceplatform;
 
 import javax.swing.JOptionPane;
 
