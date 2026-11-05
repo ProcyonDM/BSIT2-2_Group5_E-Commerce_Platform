@@ -29,23 +29,21 @@ public class ShopManager {
     public static final int LOW_STOCK_LEVEL = 5;
 
     private final String sessionId;
-    private ArrayList<Product> productList;      // always loaded ORDER BY product_id (needed for binary search)
-    private HashMap<Integer, User> userMap;      // userId -> User (hash map, quick access)
+    private ArrayList<Product> productList;      
+    private HashMap<Integer, User> userMap;      
     private ArrayList<Order> orderList;
     private ArrayList<OrderItem> cart;
 
     public ShopManager(String sessionId) {
         this.sessionId = sessionId;
         productList = new ArrayList<>();
-        userMap = new LinkedHashMap<>(); // a HashMap that keeps the ORDER BY user_id order
+        userMap = new LinkedHashMap<>(); 
         orderList = new ArrayList<>();
         cart = new ArrayList<>();
     }
 
-    // ---------------------------------------------------------------- SESSION
-
     public User getCurrentUser() {
-        return SessionManager.getUser(sessionId); // hash map lookup
+        return SessionManager.getUser(sessionId); 
     }
 
     public boolean isAdmin() {
@@ -88,8 +86,6 @@ public class ShopManager {
         if (date != null && date.length() > 19) return date.substring(0, 19);
         return date;
     }
-
-    // ---------------------------------------------------------------- LOAD
 
     public String loadDataFromDatabase() {
         productList.clear();
@@ -162,8 +158,6 @@ public class ShopManager {
         }
         return null;
     }
-
-    // ---------------------------------------------------------------- PRODUCTS (ADMIN)
 
     private void validateProduct(int id, String name, double price, String category, int stock) {
         if (id <= 0) {
@@ -248,9 +242,6 @@ public class ShopManager {
         return affected > 0;
     }
 
-    // ---------------------------------------------------------------- SEARCH / BROWSE
-
-    // Binary search by product ID (productList is loaded ORDER BY product_id).
     public Product searchById(int id) {
         int low = 0;
         int high = productList.size() - 1;
@@ -267,7 +258,6 @@ public class ShopManager {
         return null;
     }
 
-    // Binary search (lower bound) on a copy sorted by name: every product whose name starts with the text.
     public ArrayList<Product> searchByName(String text) {
         ArrayList<Product> sorted = mergeSort(new ArrayList<>(productList), SORT_NAME);
         ArrayList<Product> result = new ArrayList<>();
@@ -299,7 +289,6 @@ public class ShopManager {
         return categories;
     }
 
-    // searchBy: 0 = name (binary search), 1 = product ID (binary search). Throws NumberFormatException for a bad ID.
     public ArrayList<Product> browse(int searchBy, String text, String category, int sortMode) {
         ArrayList<Product> base;
         if (text == null || text.trim().isEmpty()) {
@@ -320,8 +309,6 @@ public class ShopManager {
         }
         return mergeSort(filtered, sortMode);
     }
-
-    // ---------------------------------------------------------------- CART (CUSTOMER)
 
     private OrderItem findCartItem(int productId) {
         for (OrderItem item : cart) {
@@ -365,8 +352,6 @@ public class ShopManager {
         return total;
     }
 
-    // ---------------------------------------------------------------- PAYMENT / CHECKOUT (CUSTOMER)
-
     private void validatePayment(String method, String details) {
         String d = (details == null) ? "" : details.replace(" ", "");
         if ("Credit Card".equals(method)) {
@@ -382,7 +367,6 @@ public class ShopManager {
         }
     }
 
-    // Returns the new order ID. The card / wallet number is validated but NEVER stored.
     public int checkout(String method, String details) {
         requireCustomer();
         if (cart.isEmpty()) {
@@ -450,7 +434,6 @@ public class ShopManager {
         return orderId;
     }
 
-    // Customers may only rate products they have bought; rating again replaces the old rating.
     public void rateProduct(int productId, int rating) {
         requireCustomer();
         if (rating < 1 || rating > 5) {
@@ -480,9 +463,6 @@ public class ShopManager {
         loadDataFromDatabase();
     }
 
-    // ---------------------------------------------------------------- USERS
-
-    // Static so the Register screen can use it before anyone is logged in.
     public static void registerCustomer(String username, String password, String name, String email) {
         if (username == null || !username.matches("[A-Za-z0-9_]{3,30}")) {
             throw new IllegalArgumentException("Username must be 3-30 letters, numbers or underscores.");
@@ -556,8 +536,6 @@ public class ShopManager {
         return affected > 0;
     }
 
-    // ---------------------------------------------------------------- SORTING
-
     private int compare(Product a, Product b, int mode) {
         switch (mode) {
             case SORT_PRICE_ASC:
@@ -597,7 +575,6 @@ public class ShopManager {
         return merged;
     }
 
-    // Insertion sort: highest order total first.
     private ArrayList<Order> insertionSortOrders(ArrayList<Order> source) {
         ArrayList<Order> list = new ArrayList<>(source);
         for (int i = 1; i < list.size(); i++) {
@@ -612,7 +589,6 @@ public class ShopManager {
         return list;
     }
 
-    // Insertion sort on {productId, units, revenue}: most units first.
     private ArrayList<double[]> insertionSortByUnits(ArrayList<double[]> source) {
         ArrayList<double[]> list = new ArrayList<>(source);
         for (int i = 1; i < list.size(); i++) {
@@ -626,8 +602,6 @@ public class ShopManager {
         }
         return list;
     }
-
-    // ---------------------------------------------------------------- REPORTS (ADMIN)
 
     private String fit(String text, int width) {
         if (text == null) return "";
