@@ -11,7 +11,7 @@ public class User {
     private String username;
     private String name;
     private String email;
-    private String role; // Admin or Customer
+    private String role; 
     private ArrayList<Order> orderHistory;
 
     public User(int id, String username, String name, String email, String role) {
