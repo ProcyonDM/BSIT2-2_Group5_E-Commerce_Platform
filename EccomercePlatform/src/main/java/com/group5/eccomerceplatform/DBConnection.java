@@ -2,19 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ds.ecommerce;
+package com.mycompany.ecomerceplatformmain;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- *
- * @author Rudy Anonuevo
- */
 public class DBConnection {
-    private static final String SERVER_URL = "jdbc:mysql://localhost:3306/?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+private static final String SERVER_URL = "jdbc:mysql://localhost:3306/?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String URL = "jdbc:mysql://localhost:3306/ecommerce_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -73,7 +69,6 @@ public class DBConnection {
                         + "unit_price DOUBLE NOT NULL, "
                         + "quantity INT NOT NULL)");
 
-                // The only predefined data: one Admin account. Customers register through the GUI.
                 st.executeUpdate("INSERT IGNORE INTO users (username, password, name, email, role) "
                         + "VALUES ('admin', 'admin123', 'Administrator', 'admin@shop.com', 'Admin')");
             }
