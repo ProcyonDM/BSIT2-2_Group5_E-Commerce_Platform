@@ -1,0 +1,61 @@
+
+CREATE DATABASE IF NOT EXISTS ecommerce_db;
+
+USE ecommerce_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(30) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    product_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DOUBLE NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    stock INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS product_ratings (
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    rating INT NOT NULL,
+    PRIMARY KEY (user_id, product_id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    total_price DOUBLE NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    product_name VARCHAR(100) NOT NULL,
+    unit_price DOUBLE NOT NULL,
+    quantity INT NOT NULL
+);
+
+INSERT IGNORE INTO users
+(username, password, name, email, role)
+VALUES
+('admin', 'admin123', 'Administrator',
+ 'admin@shop.com', 'Admin');
+
+SHOW TABLES;
+
+SELECT * FROM users WHERE username = 'admin';
+
+DESCRIBE users;
+DESCRIBE products;
+DESCRIBE product_ratings;
+DESCRIBE orders;
+DESCRIBE order_items;
